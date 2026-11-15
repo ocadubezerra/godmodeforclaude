@@ -4,7 +4,7 @@
 
 <p align="center"><b>Modo Deus para o Claude Code:</b> o Opus pensa, planeja e confere; o Haiku faz o trabalho braçal; tudo num loop de verificação até cumprir o objetivo.</p>
 
-<p align="center"><a href="#english">English</a> · <a href="LICENSE">MIT</a></p>
+<p align="center"><a href="#english">English</a> · <a href="LICENSE">Direitos reservados</a></p>
 
 ---
 
@@ -107,12 +107,12 @@ Install as a plugin with `/plugin marketplace add ocadubezerra/godmodeforclaude`
 
 ## Licença
 
-[MIT](LICENSE) © 2026 Cadu Bezerra
+© 2026 Cadu Bezerra. [Direitos reservados](LICENSE); licenças anteriores continuam aplicáveis.
 
 
 ## Direitos, acesso e segurança
 
-A licença MIT permanece aplicável ao código. Consulte [RIGHTS.md](RIGHTS.md) para autoria, marca e material de terceiros, e [SECURITY.md](SECURITY.md) para relatos de vulnerabilidade. Não publique credenciais, dados de clientes ou detalhes internos de infraestrutura.
+A reserva de direitos atual respeita as licenças anteriormente concedidas. Consulte [RIGHTS.md](RIGHTS.md) para autoria, marca e material de terceiros, e [SECURITY.md](SECURITY.md) para relatos de vulnerabilidade. Não publique credenciais, dados de clientes ou detalhes internos de infraestrutura.
 
 
 ## Documentação do projeto
@@ -122,4 +122,4 @@ A licença MIT permanece aplicável ao código. Consulte [RIGHTS.md](RIGHTS.md) 
 - [Política de segurança](SECURITY.md)
 - [Autoria e uso da marca](RIGHTS.md)
 - [Procedência e avisos](NOTICE.md)
-- [Licença MIT](LICENSE)
+- [Reserva de direitos](LICENSE)

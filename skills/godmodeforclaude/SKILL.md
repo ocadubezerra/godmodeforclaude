@@ -1,7 +1,7 @@
 ---
 name: godmodeforclaude
 description: Monta o "Modo Deus" no projeto atual do Claude Code. Um orquestrador no Opus (esforço extra alto) planeja e confere, executores no Haiku fazem o trabalho braçal, o plano fica em arquivo, as skills se aprimoram a cada erro corrigido e o /goal fecha o loop de verificação. Use quando o usuário pedir /godmodeforclaude, "modo deus" ou para configurar orquestrador e subagentes no projeto.
-license: MIT
+license: Proprietary
 ---
 
 # Modo Deus para o Claude Code

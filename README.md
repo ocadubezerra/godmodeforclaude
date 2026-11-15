@@ -113,3 +113,13 @@ Install as a plugin with `/plugin marketplace add ocadubezerra/godmodeforclaude`
 ## Direitos, acesso e segurança
 
 A licença MIT permanece aplicável ao código. Consulte [RIGHTS.md](RIGHTS.md) para autoria, marca e material de terceiros, e [SECURITY.md](SECURITY.md) para relatos de vulnerabilidade. Não publique credenciais, dados de clientes ou detalhes internos de infraestrutura.
+
+
+## Documentação do projeto
+
+- [Como contribuir](CONTRIBUTING.md)
+- [Código de conduta](CODE_OF_CONDUCT.md)
+- [Política de segurança](SECURITY.md)
+- [Autoria e uso da marca](RIGHTS.md)
+- [Procedência e avisos](NOTICE.md)
+- [Licença MIT](LICENSE)

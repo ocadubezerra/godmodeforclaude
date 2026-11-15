@@ -1,0 +1,12 @@
+{
+  "name": "godmodeforclaude",
+  "description": "Modo Deus para o Claude Code: orquestrador + executores + memória + /goal.",
+  "owner": { "name": "Cadu Bezerra" },
+  "plugins": [
+    {
+      "name": "godmodeforclaude",
+      "source": "./",
+      "description": "Monta o Modo Deus no projeto: orquestrador (Opus), executor (Haiku), CLAUDE.md, settings.json, memória e skills que se aprimoram."
+    }
+  ]
+}

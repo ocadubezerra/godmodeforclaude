@@ -3,6 +3,6 @@
   "version": "1.1.0",
   "description": "Modo Deus para o Claude Code: orquestrador no Opus que planeja e confere, executores no Haiku que fazem o trabalho braçal, memória em arquivo, skills que se aprimoram e loop de verificação com /goal.",
   "author": { "name": "Cadu Bezerra" },
-  "license": "MIT",
+  "license": "Proprietary",
   "keywords": ["orquestrador", "subagentes", "multi-agente", "goal", "skills", "produtividade"]
 }

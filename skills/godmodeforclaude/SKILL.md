@@ -6,7 +6,7 @@ license: MIT
 
 # Modo Deus para o Claude Code
 
-Versão: 1.0.0
+Versão: 1.1.0
 
 "Modo Deus" é um nome para uma forma de trabalhar, não uma opção do Claude Code. A ideia em três linhas:
 

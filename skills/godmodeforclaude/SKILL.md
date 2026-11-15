@@ -6,15 +6,15 @@ license: MIT
 
 # Modo Deus para o Claude Code
 
-Versão: 1.0.0
+Versão: 1.1.0
 
-"Modo Deus" é o apelido de uma combinação, não um botão das configurações:
+"Modo Deus" é um nome para uma forma de trabalhar, não uma opção do Claude Code. A ideia em três linhas:
 
-- o modelo mais caro (Opus, com esforço extra alto) só pensa, planeja e confere;
-- o modelo mais barato (Haiku) executa o trabalho braçal e devolve prova;
-- tudo roda num loop de executa, verifica e corrige até cumprir um objetivo (/goal).
+- o Opus, com esforço extra alto, fica com as decisões: planejar, dividir e revisar;
+- o Haiku, mais barato, faz a execução e volta sempre com prova;
+- o ciclo executar, conferir e corrigir se repete até o objetivo do /goal ser atingido.
 
-É o padrão orquestrador e subagentes descrito pela Anthropic em "How we built our multi-agent research system".
+O desenho segue o padrão orquestrador e subagentes do artigo "How we built our multi-agent research system", da Anthropic.
 
 ## Regras antes de criar qualquer arquivo
 
@@ -46,53 +46,53 @@ memoria/
 
 ## Passo 2. Orquestrador: `.claude/agents/orquestrador.md`
 
-Lidera: roda no Opus com esforço extra alto, planeja, delega e confere. Só pode delegar para o executor (`Agent(executor)`).
+Coordena o trabalho no Opus com esforço extra alto. O campo `tools` limita a delegação a um único tipo de subagente: `Agent(executor)`. Esse limite vale porque o orquestrador roda como sessão principal (pelo `agent` do settings ou por `claude --agent orquestrador`).
 
 ~~~markdown
 ---
 name: orquestrador
-description: Líder do projeto. Planeja, divide o trabalho, delega pros executores e confere cada entrega.
+description: Coordena o projeto. Quebra o objetivo em etapas, passa cada uma ao executor e só aceita entrega com prova.
 model: opus
 effort: xhigh
 tools: Agent(executor), Read, Write, Edit, Bash, Glob, Grep
 ---
 
-Você é o orquestrador. Você pensa, planeja e confere. Você não faz o trabalho braçal.
+Seu papel é decidir e revisar. A execução fica com o executor.
 
-Como trabalhar:
-1. Antes de tudo, leia memoria/plano.md se ele tiver conteúdo.
-2. Entenda o objetivo e escreva o plano em memoria/plano.md: etapas pequenas, cada uma com um critério de pronto que dê pra verificar.
-3. Delegue cada etapa pro executor. Quando as etapas forem independentes, chame vários executores em paralelo. No pedido, diga o que fazer, em quais arquivos e como provar que ficou pronto.
-4. Quando o executor devolver, confira de verdade: leia o arquivo, rode o teste. Nunca aceite "feito" sem evidência.
-5. Se a verificação falhar, mande o executor corrigir passando o erro exato. Repita até passar.
-6. A cada etapa concluída, atualize memoria/plano.md com o que foi feito e o que falta.
-7. No fim, mostre as evidências na conversa (saída de comandos, testes), não só diga que terminou.
+Fluxo de trabalho:
+1. Comece abrindo memoria/plano.md. Se houver plano em andamento, continue dele.
+2. Transforme o objetivo em etapas curtas e registre em memoria/plano.md. Cada etapa precisa de um teste de aceite objetivo.
+3. Envie as etapas ao executor. Etapas sem dependência entre si podem ir para vários executores ao mesmo tempo. Cada pedido informa a tarefa, os arquivos envolvidos e a prova esperada.
+4. Ao receber a entrega, confira você mesmo: abra os arquivos e rode a verificação. Resposta sem prova conta como não entregue.
+5. Se a conferência falhar, devolva a etapa ao executor com a mensagem de erro completa. Repita o ciclo até a verificação passar.
+6. Depois de cada etapa aprovada, registre em memoria/plano.md o que ficou pronto e o que ainda falta.
+7. Para encerrar, cole na conversa a saída dos comandos e testes que comprovam o resultado.
 ~~~
 
 ## Passo 3. Executor: `.claude/agents/executor.md`
 
-O trabalhador barato: roda no Haiku, faz só a etapa que recebeu e devolve a prova.
+Roda no Haiku, cuida de uma etapa por vez e responde com prova. Não recebe a ferramenta `Agent`, então não abre outros subagentes.
 
 ~~~markdown
 ---
 name: executor
-description: Executa uma etapa específica passada pelo orquestrador e devolve evidência de que ficou pronta.
+description: Faz uma única etapa recebida do orquestrador e responde com a prova de que ela funciona.
 model: haiku
 tools: Read, Write, Edit, Bash, Glob, Grep
 maxTurns: 30
 ---
 
-Você executa uma etapa que o orquestrador passou. Faça só isso, sem ampliar o escopo.
+Sua tarefa é a etapa que o orquestrador enviou, e nada além dela.
 
-- Leia o que precisar antes de editar qualquer coisa.
-- Ao terminar, devolva três coisas: os arquivos que mudaram, o comando de verificação que você rodou e a saída dele.
-- Se travar, diga exatamente onde e por quê. Não invente resultado.
-- Se tiver dúvida sobre o pedido, pergunte pro orquestrador em vez de adivinhar.
+- Leia os arquivos envolvidos antes de alterar qualquer um.
+- Na resposta, traga: a lista de arquivos alterados, o comando usado para verificar e a saída desse comando.
+- Se não conseguir concluir, aponte o ponto exato do bloqueio e a causa. Nunca apresente um resultado que você não obteve.
+- Se o pedido estiver ambíguo, pergunte ao orquestrador antes de seguir.
 ~~~
 
 ## Passo 4. Configurações: `.claude/settings.json`
 
-Abre o Claude Code já como orquestrador, fixa o esforço em Extra alto e compacta o contexto aos 40% da janela.
+Faz o Claude Code iniciar como orquestrador, define o esforço padrão como Extra alto e antecipa a compactação do contexto para 40%.
 
 ~~~json
 {
@@ -110,18 +110,18 @@ Abre o Claude Code já como orquestrador, fixa o esforço em Extra alto e compac
 # Regras do projeto
 
 ## Quem faz o quê
-- O orquestrador (Opus) lidera: planeja, delega e confere.
-- O executor (Haiku) faz o trabalho braçal e devolve evidência.
-- Trabalho braçal nunca fica no orquestrador.
+- Orquestrador (Opus): decide o plano, distribui as etapas e revisa as entregas.
+- Executor (Haiku): executa as etapas e responde com prova.
+- O orquestrador não executa tarefas operacionais.
 
 ## Plano e memória
-- Toda tarefa grande começa com um plano em memoria/plano.md e termina com evidência de que funcionou.
-- Decisões e estado ficam na pasta memoria/. Depois de uma compactação de contexto, releia memoria/plano.md antes de continuar.
+- Tarefas grandes abrem com um plano em memoria/plano.md e fecham com a prova de que funcionaram.
+- O estado do trabalho e as decisões ficam em memoria/. Após uma compactação de contexto, leia memoria/plano.md de novo antes de seguir.
 
 ## Skills que se aprimoram
-- Quando uma skill em .claude/skills falhar, for corrigida pelo usuário ou você descobrir um jeito melhor, atualize o SKILL.md dela no fim da tarefa.
-- Acrescente a lição na seção "Lições aprendidas", suba a versão (v1 vira v2) e diga em uma linha o que mudou.
-- Nunca reescreva a skill inteira. Só acrescente ou ajuste o trecho que falhou.
+- Ao final de uma tarefa, atualize o SKILL.md de uma skill de .claude/skills sempre que ela tiver falhado, recebido correção do usuário ou ganhado um caminho melhor.
+- Registre o aprendizado em "Lições aprendidas", aumente a versão (v1 para v2, e assim por diante) e resuma a mudança em uma linha.
+- Altere só o trecho que falhou ou acrescente o que faltava. A skill não é reescrita do zero.
 
 ## Segurança
 - Nenhum agente roda comando que apaga dados, publica, faz deploy ou envia algo para fora sem aprovação explícita do usuário na conversa.
@@ -136,18 +136,18 @@ Pergunte ao usuário qual tarefa repetitiva ele quer transformar em skill. Se el
 ~~~markdown
 ---
 name: nome-da-skill
-description: Quando usar esta skill, em uma frase.
+description: Em uma frase, quando esta skill deve ser usada.
 ---
 
 Versão: v1
 
-# Passo a passo
-1. (primeiro passo)
-2. (segundo passo)
-3. (como verificar que ficou certo)
+# Etapas
+1. (o que fazer primeiro)
+2. (o que fazer em seguida)
+3. (como conferir o resultado)
 
 # Lições aprendidas
-(vazio por enquanto. O Claude acrescenta aqui a cada erro corrigido.)
+(Comece vazio. Cada erro corrigido vira uma lição aqui.)
 ~~~
 
 ## Passo 7. Verificar e entregar
@@ -157,29 +157,29 @@ Versão: v1
 3. Diga ao usuário, nesta ordem:
    - Feche e abra o Claude Code nesta pasta (`claude`). Ele abre como orquestrador; também dá para abrir na mão com `claude --agent orquestrador`.
    - Se aparecer a pergunta de confiança na pasta, aceite. Sem isso a variável de compactação do `env` não vale.
-   - Confira com `/model` (Opus) e `/effort status` (xhigh). Para trocar na hora: `/effort low`, `medium`, `high`, `xhigh` ou `max`.
+   - Confira com `/model` (Opus) e `/effort status` (xhigh). Para trocar na hora: `/effort low`, `medium`, `high`, `xhigh` ou `max` (o `max` vale só para a sessão).
    - Se o modelo dele não aceitar `xhigh`, troque para `high` no orquestrador e no settings.
 
 ## Como usar o loop com /goal
 
-Escreva sempre três coisas: o estado final que dá pra medir, o comando que prova e um limite de turnos. O avaliador do /goal só julga o que apareceu na conversa (ele não roda comando nem abre arquivo), então peça para mostrar a saída na conversa.
+Um bom objetivo tem três partes: um resultado mensurável, o comando que comprova esse resultado e um teto de turnos. O avaliador do /goal se baseia apenas no que está escrito na conversa e não executa nada por conta própria. Por isso, peça que a saída da verificação seja colada na conversa.
 
 ```
-/goal Todos os testes passam (npm test sem nenhuma falha) e o resumo da entrega está em memoria/plano.md. Mostre a saída do npm test na conversa como prova. Pare depois de 20 turnos se não chegar lá.
+/goal npm test termina sem falhas e memoria/plano.md tem o resumo da entrega. Cole a saída do npm test na conversa. Se não concluir em 20 turnos, pare e explique o que falta.
 ```
 
-- `/goal` sozinho mostra o status; `/goal clear` remove o objetivo.
-- O objetivo vale só para a sessão atual.
+- `/goal` sem argumento mostra o objetivo atual; `/goal clear` cancela.
+- Cada objetivo vale apenas para a sessão em que foi criado.
 
 ## Compactação aos 40% ou 60%
 
-- A variável `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` define em que porcentagem da janela o contexto é compactado. Valores menores compactam mais cedo.
-- Use 40 no dia a dia e 60 em tarefas grandes. Para trocar, mude `"40"` para `"60"` no settings e reinicie o Claude Code.
-- Ela só antecipa a compactação: valores acima do padrão do Claude Code são ignorados.
-- Depois de compactar, o orquestrador relê `memoria/plano.md` e não perde o fio.
+- `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` escolhe o ponto da janela de contexto em que a compactação automática começa. Quanto menor o número, mais cedo ela acontece.
+- Sugestão: 40 para o uso diário e 60 para tarefas longas. Para mudar, edite o valor no settings e reinicie o Claude Code.
+- A variável só consegue antecipar a compactação. Um valor acima do padrão do Claude Code não tem efeito.
+- Depois da compactação, o orquestrador volta a `memoria/plano.md` e retoma de onde parou.
 
 ## Quando vale a pena
 
-- Sistemas multiagente gastam bem mais tokens que uma conversa comum: cerca de 15 vezes, segundo o artigo da Anthropic.
-- Use em trabalho grande, com várias partes e que dá para verificar.
-- Para pergunta simples ou ajuste pequeno, converse direto, sem orquestrar.
+- Um sistema com vários agentes consome muito mais tokens que uma conversa normal; o artigo da Anthropic fala em cerca de 15 vezes.
+- Reserve o Modo Deus para trabalhos grandes, divididos em partes e com resultado verificável.
+- Para dúvidas rápidas ou ajustes pontuais, use a conversa normal, sem orquestração.

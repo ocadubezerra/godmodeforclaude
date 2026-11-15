@@ -101,10 +101,15 @@ Segundo o artigo da Anthropic, um sistema com Opus liderando subagentes superou 
 <a id="english"></a>
 ## English
 
-**godmodeforclaude** sets up an orchestrator/worker system in your Claude Code project with one command. An **orchestrator** on **Opus** (extra-high effort) plans, delegates and verifies; a cheap **executor** on **Haiku** does the hands-on work and returns evidence. The plan lives in `memoria/plano.md`, skills record lessons learned and bump their version, and `/goal` keeps the loop running until a verifiable condition is met. It never overwrites existing files: it appends to them, combines settings or asks first.
+**godmodeforclaude** sets up an orchestrator/worker system in your Claude Code project with one command. An **orchestrator** on **Opus** (extra-high effort) plans, delegates and verifies; a cheap **executor** on **Haiku** does the hands-on work and returns evidence. The plan lives in `memoria/plano.md`, skills record lessons learned and bump their version, and `/goal` keeps the loop running until a verifiable condition is met. It never overwrites existing files: it appends, merges or asks first.
 
 Install as a plugin with `/plugin marketplace add ocadubezerra/godmodeforclaude` and `/plugin install godmodeforclaude@godmodeforclaude`, or copy `skills/godmodeforclaude` to `~/.claude/skills/` to get the short `/godmodeforclaude` command. Generated files are in Brazilian Portuguese. Multi-agent runs use roughly 15× more tokens than a regular chat, so use it for large, verifiable work.
 
 ## Licença
 
 [MIT](LICENSE) © 2026 Cadu Bezerra
+
+
+## Direitos, acesso e segurança
+
+A licença MIT permanece aplicável ao código. Consulte [RIGHTS.md](RIGHTS.md) para autoria, marca e material de terceiros, e [SECURITY.md](SECURITY.md) para relatos de vulnerabilidade. Não publique credenciais, dados de clientes ou detalhes internos de infraestrutura.
